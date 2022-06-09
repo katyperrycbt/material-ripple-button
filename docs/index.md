@@ -1,37 +1,78 @@
-## Welcome to GitHub Pages
+# material-ripple-button 
+### React Ripple Button
 
-You can use the [editor on GitHub](https://github.com/katyperrycbt/material-ripple-button/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
+## Description
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+React Ripple Button is similar to Material Design Button and may be used in standalone React applications or in conjunction with a CSS framework such as TailwindCSS.
 
-### Markdown
+## Installation
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+```terminal
+pnpm add material-ripple-button
 ```
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+or
 
-### Jekyll Themes
+```terminal
+yarn add material-ripple-button
+```
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/katyperrycbt/material-ripple-button/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+or
 
-### Support or Contact
+```
+npm install material-ripple-button
+```
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+## Usage
+
+```jsx
+import RippleButton from 'material-ripple-button';
+
+const MyComponent = () => {
+    return <>
+        {/* ... */}
+        <RippleButton>This is a ripple button</RippleButton>
+    <>
+}
+```
+
+### Properties
+
+| Propery                                                                                | Supported |
+| -------------------------------------------------------------------------------------- | --------- |
+| [Default attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button) | YES       |
+
+*Note*: Disable ripple and turn it into normal button by adding attribute `data-noripple`
+
+You can use any attribute, these will be completely passed directly into the `<button>` tag
+
+### Example
+
+```jsx
+import RippleButton from "material-ripple-button";
+
+export default function Home() {
+	return (
+		<>
+			{/* Other code */}
+			<RippleButton className="mt-5 p-2 text-red-500">Hello</RippleButton>
+		</>
+	);
+}
+```
+
+![Ripple Button!](https://img.upxi.me/OhlXkQjnwB "Result of Ripple Button usage")
+
+## Ripple Color
+
+The color of ripple is based on the color of the button's attribute in the order of precedence as follows:
+
+|Order | Attribute      | Color Level (r+g+b) | Behavior |
+|:------| :-----------: | :-----------: | ----------:|
+|1 | background-color | > 385.5       | darker |
+|| background-color | <= 385.5       | lighter |
+|2| border-color | > 385.5       | lighter |
+|| border-color | <= 385.5       | darker |
+|3| color | > 385.5       | lighter |
+|| color | <= 385.5       | darker |
+|4| default |        | lighter of rgb(33, 150, 243) |
