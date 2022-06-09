@@ -34,7 +34,7 @@ const MyComponent = () => {
     return <>
         {/* ... */}
         <RippleButton>This is a ripple button</RippleButton>
-    <>
+    </>
 }
 ```
 
