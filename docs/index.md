@@ -63,7 +63,7 @@ export default function Home() {
 }
 ```
 
-![Ripple Button!](https://img.upxi.me/Z3rsmpC "Result of Ripple Button usage")
+![Ripple Button!](https://img.upxi.me/sRAZdKHqtZ "Result of Ripple Button usage")
 
 ## Ripple Color
 
