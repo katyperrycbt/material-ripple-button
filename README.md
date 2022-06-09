@@ -42,6 +42,8 @@ const MyComponent = () => {
 | -------------------------------------------------------------------------------------- | --------- |
 | [Default attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button) | YES       |
 
+*Note*: Disable ripple and turn it into normal button by adding attribute `data-noripple`
+
 You can use any attribute, these will be completely passed directly into the `<button>` tag
 
 ### Example
