@@ -5,6 +5,8 @@
 
 React Ripple Button is similar to Material Design Button and may be used in standalone React applications or in conjunction with a CSS framework such as TailwindCSS.
 
+![Material Ripple Button!](https://img.upxi.me/PB4mrAmu3 "Illustration")
+
 ## Installation
 
 ```terminal
