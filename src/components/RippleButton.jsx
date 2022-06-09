@@ -38,7 +38,7 @@ function rippleEffect(event) {
     let pickedColor = window.getComputedStyle(btn).getPropertyValue("background-color");
 
     // if there is no background color, use the text or border color if border color width is greater than 0
-    if (Number(window.getComputedStyle(btn).getPropertyValue("border-width")) > 0 &&
+    if (Number(window.getComputedStyle(btn).getPropertyValue("border-width").replace("px", '')) > 0 &&
         (!pickedColor || ["transparent", "rgba(0, 0, 0, 0)", "rgb(0, 0, 0)"].includes(pickedColor))) {
         pickedColor = window.getComputedStyle(btn).getPropertyValue("border-color");
         source = 1;
