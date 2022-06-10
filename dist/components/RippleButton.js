@@ -133,7 +133,7 @@ function _unsupportedIterableToArray(o, minLen) {
 function onBlurDeleteSpan(event) {
     var btn = event.currentTarget;
     // select all span with class "ripple" or "focusripple" 
-    var spans = btn.querySelectorAll("span.tallisripple, span.tallisfocusripple");
+    var spans = btn.querySelectorAll("span.tallisfocusripple");
     // delete all span
     for(var i = 0; i < spans.length; i++){
         spans[i].remove();

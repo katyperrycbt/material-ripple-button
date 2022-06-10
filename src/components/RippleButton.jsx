@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 function onBlurDeleteSpan(event) {
     const btn = event.currentTarget;
     // select all span with class "ripple" or "focusripple" 
-    const spans = btn.querySelectorAll("span.tallisripple, span.tallisfocusripple");
+    const spans = btn.querySelectorAll("span.tallisfocusripple");
 
     // delete all span
     for (let i = 0; i < spans.length; i++) {
