@@ -1,6 +1,6 @@
 {
   "name": "material-ripple-button",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "React Ripple Button is similar to Material Design Button and may be used in standalone React applications or in conjunction with a CSS framework such as TailwindCSS.",
   "private": false,
   "main": "dist/index",
@@ -14,7 +14,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["react", "components", "ui", "material ripple button", "tailwindcss"],
+  "keywords": ["react", "components", "ui", "material ripple button", "tailwindcss", "frontend", "css", "framework", "nextjs"],
   "author": "Tallis",
   "license": "ISC",
   "devDependencies": {

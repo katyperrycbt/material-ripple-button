@@ -149,12 +149,80 @@ function rippleColor() {
     }
     return lightenColor;
 }
+function focusRippleEffect(event) {
+    event.stopPropagation();
+    var btn = event.currentTarget;
+    // clear focus ripple span if it exists
+    var focusRipple = btn.querySelector("span.ripple");
+    if (focusRipple) {
+        return;
+    }
+    var circle = document.createElement("span");
+    var radius = Math.sqrt(btn.clientWidth * btn.clientWidth, btn.clientHeight * btn.clientHeight);
+    var diameter = radius * 2;
+    var position = btn.getBoundingClientRect();
+    circle.style.width = circle.style.height = "".concat(diameter, "px");
+    circle.style.left = "-".concat(position.width / 2, "px");
+    circle.style.top = "-".concat(radius - position.height / 2, "px");
+    // get the background color of the button, then lighten that color and set it as the ripple color background
+    var source = 0;
+    var pickedColor = window.getComputedStyle(btn).getPropertyValue("background-color");
+    // if there is no background color, use the text or border color if border color width is greater than 0
+    if (Number(window.getComputedStyle(btn).getPropertyValue("border-width").replace("px", "")) > 0 && (!pickedColor || [
+        "transparent",
+        "rgba(0, 0, 0, 0)",
+        "rgb(0, 0, 0)"
+    ].includes(pickedColor))) {
+        pickedColor = window.getComputedStyle(btn).getPropertyValue("border-color");
+        source = 1;
+    }
+    if (!pickedColor || [
+        "transparent",
+        "rgba(0, 0, 0, 0)",
+        "rgb(0, 0, 0)"
+    ].includes(pickedColor)) {
+        pickedColor = window.getComputedStyle(btn).getPropertyValue("color");
+        source = 2;
+    }
+    // if not, default is lightblue
+    if (!pickedColor || [
+        "transparent"
+    ].includes(pickedColor)) {
+        pickedColor = "rgb(33, 150, 243)";
+        source = 3;
+    }
+    // lighten rgb color by 50%
+    var rgb = pickedColor.match(/\d+/g);
+    var r = Number(rgb[0]);
+    var g = Number(rgb[1]);
+    var b = Number(rgb[2]);
+    var lightenColor;
+    // if the color is nearly black, make it lighter and vice versa
+    if (r + g + b > 382.5) {
+        lightenColor = rippleColor(r, g, b, false, source);
+    } else {
+        lightenColor = rippleColor(r, g, b, true, source);
+    }
+    circle.style.backgroundColor = "".concat(lightenColor);
+    circle.style.filter = "brightness(1.5)";
+    circle.classList.add("tallisfocusripple");
+    btn.appendChild(circle);
+    // delete this from the dom after 6s (3 loops of ripple animation)
+    setTimeout(function() {
+        circle.remove();
+    }, 6000);
+}
 function rippleEffect(event) {
     event.stopPropagation();
     var btn = event.currentTarget;
+    // clear focus ripple span if it exists
+    var focusRipple = btn.querySelector("span.focusripple");
+    if (focusRipple) {
+        focusRipple.remove();
+    }
     var circle = document.createElement("span");
-    var diameter = Math.max(btn.clientWidth, btn.clientHeight);
-    var radius = diameter / 2;
+    var radius = Math.sqrt(btn.clientWidth * btn.clientWidth, btn.clientHeight * btn.clientHeight);
+    var diameter = radius * 2;
     var position = btn.getBoundingClientRect();
     circle.style.width = circle.style.height = "".concat(diameter, "px");
     circle.style.left = "".concat((event.clientX || event.touches[0].clientX) - (position.left + radius), "px");
@@ -195,10 +263,8 @@ function rippleEffect(event) {
     // if the color is nearly black, make it lighter and vice versa
     if (r + g + b > 382.5) {
         lightenColor = rippleColor(r, g, b, false, source);
-    // lightenColor = `rgba(${Math.min(r * 1.5, 255)}, ${Math.min(g * 1.5, 255)}, ${Math.min(b * 1.5, 255)}, 0.5)`;
     } else {
         lightenColor = rippleColor(r, g, b, true, source);
-    // lightenColor = `rgba(${r * 0.5}, ${g * 0.5}, ${b * 0.5}, 0.5)`;
     }
     circle.style.backgroundColor = "".concat(lightenColor);
     circle.style.filter = "brightness(1.5)";
@@ -209,29 +275,34 @@ function rippleEffect(event) {
         circle.remove();
     }, 1000);
 }
-var addEventToButtons = function(btn) {
+var addEventToButtons = function() {
     var isTouchDevice = false;
     // check if is touch device
     if (window.matchMedia("(pointer: coarse)").matches) {
         isTouchDevice = true;
     }
-    // check if this Button has data-noripple attribute
-    var noRipple = btn.getAttribute("data-noripple");
-    if (noRipple) {
-        return;
+    // add event to all buttons that not has disableRipple attribute
+    var buttons = document.querySelectorAll("button:not([data-noripple])");
+    for(var i = 0; i < buttons.length; i++){
+        // remove old event
+        buttons[i].removeEventListener("touchstart", rippleEffect, {
+            passive: true
+        });
+        buttons[i].removeEventListener("mousedown", rippleEffect, {
+            passive: true
+        });
+        buttons[i].removeEventListener("focus", focusRippleEffect, {
+            passive: true
+        });
+        isTouchDevice ? buttons[i].addEventListener("touchstart", rippleEffect, {
+            passive: true
+        }) : buttons[i].addEventListener("mousedown", rippleEffect, {
+            passive: true
+        });
+        buttons[i].addEventListener("focus", focusRippleEffect, {
+            passive: true
+        });
     }
-    // remove old event
-    btn.removeEventListener("touchstart", rippleEffect, {
-        passive: true
-    });
-    btn.removeEventListener("mousedown", rippleEffect, {
-        passive: true
-    });
-    isTouchDevice ? btn.addEventListener("touchstart", rippleEffect, {
-        passive: true
-    }) : btn.addEventListener("mousedown", rippleEffect, {
-        passive: true
-    });
 };
 var RippleButton = function(_param) {
     var children = _param.children, props = _objectWithoutProperties(_param, [
@@ -242,6 +313,7 @@ var RippleButton = function(_param) {
     (0, _react).useEffect(function() {
         var btn = btnRef === null || btnRef === void 0 ? void 0 : btnRef.current;
         if (window !== undefined && mounted && btn) {
+            btn.classList.add("tallisbutton");
             addEventToButtons(btn);
             // on resize check if is touch device
             window.addEventListener("resize", function() {
@@ -273,6 +345,6 @@ var RippleButton = function(_param) {
         return /*#__PURE__*/ _react.default.createElement("div", null);
     }
 };
-var css = "\n    span.tallisripple {\n        position: absolute;\n        border-radius: 50%;\n        transform: scale(0);\n        animation: tallisripple 1s ease-out;\n        background-color: rgba(255, 255, 255, 0.7);\n    }\n    @keyframes tallisripple {\n        to {\n            transform: scale(4);\n            opacity: 0;\n        }\n    }\n    button.tallisripple {\n        overflow: hidden;\n	    position: relative;\n	    -webkit-tap-highlight-color: transparent;\n    }\n";
+var css = "\n    span.tallisripple {\n        position: absolute;\n	    border-radius: 50%;\n	    transform: scale(0);\n	    animation: tallisripple 1s ease;\n	    background-color: rgba(255, 255, 255, 0.7);\n    }\n    @keyframes tallisripple {\n        to {\n            transform: scale(1);\n            opacity: 0;\n        }\n    }\n    span.tallisfocusripple {\n        position: absolute;\n        border-radius: 50%;\n        transform: scale(0);\n        animation: tallisfocusripple 2s ease-in-out;\n        animation-iteration-count: 3;\n        background-color: rgba(255, 255, 255, 0.7);\n    }\n    \n    @keyframes tallisfocusripple {\n        0%,\n        100% {\n            transform: scale(40%);\n            opacity: 0.5;\n        }\n        50% {\n            transform: scale(45%);\n            opacity: 0.5;\n        }\n    }\n    button.tallisbutton {\n        overflow: hidden;\n	    position: relative;\n	    -webkit-tap-highlight-color: transparent;\n    }\n";
 var _default = RippleButton;
 exports.default = _default;

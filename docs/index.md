@@ -65,6 +65,11 @@ export default function Home() {
 
 ![Ripple Button!](https://img.upxi.me/sRAZdKHqtZ "Result of Ripple Button usage")
 
+### On Focus
+When the button is focused, the ripple effect also appears but has a different behavior, and either disappears after a few seconds or disappears immediately when it is pressed/touched (mousedown/touchstart).
+
+![On Focus](https://img.upxi.me/i1Ak5P "On focus ripple effect")
+
 ## Ripple Color
 
 The color of ripple is based on the color of the button's attribute in the order of precedence as follows:
