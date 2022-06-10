@@ -130,6 +130,15 @@ function _unsupportedIterableToArray(o, minLen) {
     if (n === "Map" || n === "Set") return Array.from(n);
     if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
 }
+function onBlurDeleteSpan(event) {
+    var btn = event.currentTarget;
+    // select all span with class "ripple" or "focusripple" 
+    var spans = btn.querySelectorAll("span.tallisripple, span.tallisfocusripple");
+    // delete all span
+    for(var i = 0; i < spans.length; i++){
+        spans[i].remove();
+    }
+}
 function rippleColor() {
     var r = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : 0, g = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 0, b = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : 0, isDark = arguments.length > 3 && arguments[3] !== void 0 ? arguments[3] : 0, source = arguments.length > 4 && arguments[4] !== void 0 ? arguments[4] : 0;
     var isBG = source === 0;
@@ -294,12 +303,18 @@ var addEventToButtons = function() {
         buttons[i].removeEventListener("focus", focusRippleEffect, {
             passive: true
         });
+        buttons[i].removeEventListener("blur", onBlurDeleteSpan, {
+            passive: true
+        });
         isTouchDevice ? buttons[i].addEventListener("touchstart", rippleEffect, {
             passive: true
         }) : buttons[i].addEventListener("mousedown", rippleEffect, {
             passive: true
         });
         buttons[i].addEventListener("focus", focusRippleEffect, {
+            passive: true
+        });
+        buttons[i].addEventListener("blur", onBlurDeleteSpan, {
             passive: true
         });
     }

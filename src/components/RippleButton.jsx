@@ -1,5 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+function onBlurDeleteSpan(event) {
+    const btn = event.currentTarget;
+    // select all span with class "ripple" or "focusripple" 
+    const spans = btn.querySelectorAll("span.tallisripple, span.tallisfocusripple");
+
+    // delete all span
+    for (let i = 0; i < spans.length; i++) {
+        spans[i].remove();
+    }
+}
+
 function rippleColor(r = 0, g = 0, b = 0, isDark = 0, source = 0) {
     const isBG = source === 0;
     let lightenColor;
@@ -181,12 +192,14 @@ const addEventToButtons = () => {
         buttons[i].removeEventListener("touchstart", rippleEffect, { passive: true });
         buttons[i].removeEventListener("mousedown", rippleEffect, { passive: true });
         buttons[i].removeEventListener("focus", focusRippleEffect, { passive: true });
+        buttons[i].removeEventListener("blur", onBlurDeleteSpan, { passive: true });
 
         isTouchDevice
             ? buttons[i].addEventListener("touchstart", rippleEffect, { passive: true })
             : buttons[i].addEventListener("mousedown", rippleEffect, { passive: true });
 
         buttons[i].addEventListener("focus", focusRippleEffect, { passive: true });
+        buttons[i].addEventListener("blur", onBlurDeleteSpan, { passive: true });
     }
 }
 
